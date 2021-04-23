@@ -1,0 +1,13 @@
+{
+  "0.2": {
+    "new": ["Automatic sentry report for unhandled errors", "Project is now on GitHub"]
+  },
+  "0.1.1": {
+    "fix": ["Error handler now structured properly for inherited errors"]
+  },
+  "0.1": {
+    "new": ["Core Bot", "Extensions handling", "Error handling", "Runtime manager", "Individual prefix", "Bot info", "Server info", "Notify role on reaction", "Changelog command", "Config"],
+    "fix": [],
+    "removed": []
+  }
+}

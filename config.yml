@@ -1,0 +1,12 @@
+name: Dimabot
+version: 0.1.1
+
+repo:
+  owner: Feleuxens
+  name: Dimabot
+  icon: "https://github.com/Feleuxens.png"
+
+prefix:
+  default: .
+  server:
+    0: "."

@@ -1,0 +1,3 @@
+GREEN = 0x1b6e00
+YELLOW = 0xf5c000
+RED = 0xff0000

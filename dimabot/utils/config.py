@@ -12,6 +12,8 @@ class Config:
     NAME: str
     VERSION: str
 
+    REPO_LINK: str
+
     AUTHOR: Contributor
     CONTRIBUTORS: List[int] = []
 
@@ -25,6 +27,8 @@ def load_config(path: Path):
 
     Config.NAME = config["name"]
     Config.VERSION = config["version"]
+
+    Config.REPO_LINK = config["repo"]["link"]
 
     Config.AUTHOR = Contributor.Felux
     Config.CONTRIBUTORS.extend([

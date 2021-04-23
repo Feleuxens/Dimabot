@@ -1,10 +1,11 @@
 name: Dimabot
-version: 0.1.1
+version: 0.2
 
 repo:
   owner: Feleuxens
   name: Dimabot
   icon: "https://github.com/Feleuxens.png"
+  link: "https://github.com/Feleuxens/Dimabot/"
 
 prefix:
   default: .

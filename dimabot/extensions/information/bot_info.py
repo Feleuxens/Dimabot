@@ -64,11 +64,12 @@ class BotInfo(commands.Cog):
         embed.set_thumbnail(url=f"{ctx.bot.user.avatar_url_as(format='png', size=512)}")
         embed.add_field(name="Author", value=f"<@{Config.AUTHOR}>", inline=True)
         embed.add_field(name="Version", value=f"{Config.VERSION}", inline=True)
-        embed.add_field(name="GitHub", value="Not available yet", inline=False)
+        embed.add_field(name="GitHub", value=f"{Config.REPO_LINK}", inline=False)
         embed.add_field(name="Prefix", value=f"`{prefix}` or `@Dimabot`", inline=True)
         embed.add_field(name="Help Command", value=f"`{prefix}help`", inline=True)
-        embed.add_field(name="Bug Reports / Feature Requests", value=f"Please write a message in <#828205319318536242> "
-                                                                     f"or contact <@{Config.AUTHOR}> on Discord",
+        embed.add_field(name="Bug Reports / Feature Requests",
+                        value=f"Please write a message in <#828205319318536242> "
+                              f"or open an issue on [GitHub]({Config.REPO_LINK}).",
                         inline=False)
         await ctx.send(embed=embed)
 

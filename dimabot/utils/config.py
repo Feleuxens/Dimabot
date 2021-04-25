@@ -26,7 +26,7 @@ def load_config(path: Path):
         config = yaml.safe_load(f)
 
     Config.NAME = config["name"]
-    Config.VERSION = config["version"]
+    Config.VERSION = str(config["version"])
 
     Config.REPO_LINK = config["repo"]["link"]
 

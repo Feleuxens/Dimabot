@@ -45,7 +45,7 @@ bot.remove_command("help")  # remove standard help function
 
 
 extensions = (
-    "general.roles",
+    "general.welcome",
     "general.easter_eggs",
     "information.bot_info",
     "information.server_info",

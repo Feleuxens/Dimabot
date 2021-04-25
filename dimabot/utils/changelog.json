@@ -1,4 +1,8 @@
 {
+  "0.2.1": {
+    "new": ["Welcome message", "Notification role on reaction"],
+    "fix": ["Prevented Config.VERSION from parsing to float"]
+  },
   "0.2": {
     "new": ["Automatic sentry report for unhandled errors", "Project is now on GitHub"]
   },

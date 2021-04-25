@@ -26,6 +26,12 @@ class CoreErrorHandler(commands.Cog):
             await ctx.send(embed=Embed(title="Something went wrong", description="You specified too many arguments.",
                                        color=colors.RED))
 
+        # Discord Exception -> CommandError -> UserInputError -> BadArgument -> ChannelNotFound
+        elif isinstance(error, errors.ChannelNotFound):  # lowest children: Parent: BadArgument, Level: 5
+            await ctx.send(embed=Embed(title="Something went wrong",
+                                       description="Cannot find that channel. Please check your input.",
+                                       color=colors.YELLOW))
+
         # Discord Exception -> CommandError -> UserInputError -> BadArgument -> RoleNotFound
         elif isinstance(error, errors.RoleNotFound):  # lowest children: Parent: BadArgument, Level: 5
             await ctx.send(embed=Embed(title="Error", description="Cannot find the role. This is most likely due"

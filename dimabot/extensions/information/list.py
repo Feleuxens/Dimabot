@@ -20,4 +20,3 @@ class List(commands.Cog):
         :param argument: Name of what you want a list. Leave empty for a general list.
         :return: None
         """
-        pass

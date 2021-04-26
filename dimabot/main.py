@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from discord import Intents, Message
 from discord.ext.commands import Bot
 
@@ -67,7 +66,7 @@ for cog in core:
 @bot.event
 async def on_error(*_, **__):
     # sentry_sdk.capture_exception()
-    raise  # skipcq: PYL-E0704
+    raise
 
 
 @bot.event

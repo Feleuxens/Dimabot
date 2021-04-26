@@ -21,9 +21,8 @@ class CorePrefix(commands.Cog):
     @commands.group(name="prefix", invoke_without_command=True)
     async def prefix(self, ctx: Context):
         pre = Config.DEFAULT_PREFIX
-        if ctx.guild is not None:
-            if ctx.guild.id in Config.SERVER_PREFIXES:
-                pre = Config.SERVER_PREFIXES.get(ctx.guild.id)
+        if ctx.guild is not None and ctx.guild.id in Config.SERVER_PREFIXES:
+            pre = Config.SERVER_PREFIXES.get(ctx.guild.id)
         await ctx.send(
             embed=Embed(title="Prefix", description=f"Prefix is currently set to `{pre}`", color=colors.GREEN))
 

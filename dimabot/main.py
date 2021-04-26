@@ -1,6 +1,4 @@
 from pathlib import Path
-
-import sentry_sdk
 from discord import Intents, Message
 from discord.ext.commands import Bot
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 from discord import Embed
 from discord.ext import commands
-from discord.ext.commands import Context, Bot, errors
+from discord.ext.commands import Context, Bot
 
 from utils import colors
 from utils.config import Config
@@ -17,16 +17,14 @@ class CoreChangelog(commands.Cog):
             with open(Path("dimabot/utils/changelog.json"), "r", encoding="utf-8") as f:
                 self.changelog_data: dict = json.load(f)
                 self.data_found = True
-        except IOError as err:
+        except IOError:
             print("No changelog.json was found. Changelog command won't be useable.")
 
     @commands.group(name="changelog", aliases=["ch", "change"], invoke_without_command=True)
     @commands.cooldown(2, 3, commands.BucketType.user)
-    async def changelog(self, ctx: Context, value: str = None, *rest: str):
+    async def changelog(self, ctx: Context, value: str = None):
         if not self.data_found:
             return
-        if len(rest) > 0:
-            raise errors.TooManyArguments
 
         version = Config.VERSION
         if value is not None:

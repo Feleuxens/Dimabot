@@ -20,8 +20,5 @@ class EasterEggs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, msg: Message):
-        if msg.guild is None:
-            if msg.author.id == 206029057991770112 or msg.author.id == 203345342492704768:
-                print(f"{msg.author.name}: {msg.content}")
         if "fuck you" in msg.content.lower():
             await msg.add_reaction("🖕")  # \ud83d\udd95

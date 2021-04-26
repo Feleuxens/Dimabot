@@ -43,7 +43,7 @@ class CorePrefix(commands.Cog):
             return member.id == ctx.author.id
 
         try:
-            reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)
+            reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)  # skipcq: PYL-W0612
         except asyncio.TimeoutError:
             await ctx.send("Action cancelled!")
         else:
@@ -76,7 +76,7 @@ class CorePrefix(commands.Cog):
                 yaml.safe_dump(config, f)
             return True
 
-        except FileNotFoundError as exc:
+        except FileNotFoundError:
             logger.critical("Prefix could not be saved because config.yml missing.")
             # print(exc)
             return False

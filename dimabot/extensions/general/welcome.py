@@ -72,7 +72,7 @@ class WelcomeChannel(Cog):
             return member.id == ctx.author.id
 
         try:
-            reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)
+            reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)  # skipcq: PYL-W0612
         except asyncio.TimeoutError:
             await ctx.send("Action cancelled!")
         else:
@@ -131,15 +131,13 @@ def __save_channels__(channels_config):
 
 
 def __load_channels__():
-    channels: dict
+    channels: dict = {"welcome": {"0": 0}, "guidelines": {"0": 0}, "notification_msg": {"0": 0}}  # default value
     try:
         with open(Path("channels.json"), "r") as f:
             channels = json.load(f)
     except FileNotFoundError:  # create file if not found
         with open(Path("channels.json"), "w") as f:
             logger.debug("No channels.json found. Creating one with default values.")
-            channels = {"welcome": {"0": 0}, "guidelines": {"0": 0}, "notification_msg": {"0": 0}}
             # server id: channel or message id
             json.dump(channels, f)
-    finally:
-        return channels
+    return channels

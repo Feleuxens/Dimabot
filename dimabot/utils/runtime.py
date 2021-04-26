@@ -1,9 +1,12 @@
-from discord import Status
+from discord import Status, User, Embed
 from discord.ext import commands
-from discord.ext.commands import Context, check_any, has_permissions, is_owner
+from discord.ext.commands import Context, check_any, has_permissions, is_owner, Bot
 
 from utils import colors
-from utils.extensions import *
+from utils.extensions import reload_extensions, unload_extensions
+from utils.logs import get_logger
+
+logger = get_logger(__name__)
 
 
 class CoreRuntime(commands.Cog):

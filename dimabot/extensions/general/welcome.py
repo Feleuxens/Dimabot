@@ -107,6 +107,7 @@ class WelcomeChannel(Cog):
         emoji: PartialEmoji = payload.emoji
         member: Member = payload.member
 
+        # skipcq: PYL-R1705
         if member is None or member.bot or emoji.id != 809038655510675516:  # ignore reactions outside server or bots
             return
         elif payload.message_id != self.channels_config["notification_msg"][str(payload.guild_id)]:

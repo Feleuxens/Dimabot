@@ -66,7 +66,7 @@ for cog in core:
 @bot.event
 async def on_error(*_, **__):
     # sentry_sdk.capture_exception()
-    raise
+    raise  # skipcq: PYL-E0704
 
 
 @bot.event

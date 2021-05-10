@@ -1,3 +1,5 @@
+import time
+
 from discord import Embed, ActivityType, Status, Activity, Game
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
@@ -19,6 +21,7 @@ class BotInfo(commands.Cog):
         self.status_counter = 0
         self.bot: Bot = bot
         self.status_loop.start()
+        self.start_time = time.time()
 
     def cog_unload(self):
         self.status_loop.cancel()
@@ -51,7 +54,7 @@ class BotInfo(commands.Cog):
         :param ctx: Current context
         :return: None
         """
-        if ctx.guild is None:
+        if ctx.guild is None or ctx.guild.id not in Config.SERVER_PREFIXES:
             prefix = Config.DEFAULT_PREFIX
         else:
             prefix = Config.SERVER_PREFIXES.get(ctx.guild.id)
@@ -109,3 +112,15 @@ class BotInfo(commands.Cog):
                       color=colors.GREEN
                       )
         await ctx.send(embed=embed)
+
+    @commands.command(name="uptime")
+    @commands.cooldown(2, 3, commands.BucketType.user)
+    async def uptime(self, ctx: Context):
+        uptime = round(time.time() - self.start_time)
+        days = int(uptime / 86400)
+        hours = int(uptime / 3600) % 24
+        minutes = int(uptime / 60) % 60
+        seconds = uptime % 60
+        await ctx.send(embed=Embed(title="Uptime",
+                                   description=f"Running for {days}:{hours}:{minutes}:{seconds}",
+                                   color=colors.GREEN))

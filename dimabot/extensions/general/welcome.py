@@ -79,7 +79,7 @@ class WelcomeChannel(Cog):
             if reaction.emoji == "\u2705":
 
                 self.channels_config["welcome"][str(ctx.guild.id)] = welcome_channel.id
-                await channel.purge(bulk=True)
+                await welcome_channel.purge(bulk=True)
                 embed = Embed(title="Welcome to the Matrix",
                               description="Hi! We're glad that you joined.", color=colors.GREEN)
                 if guidelines_channel is not None:
@@ -88,13 +88,18 @@ class WelcomeChannel(Cog):
                     embed.add_field(name="Further Information:",
                                     value="If you want more information feel free to look into "
                                           f"<#{self.channels_config['guidelines'][str(ctx.guild.id)]}>.", inline=False)
+
+                try:
+                    reac_emoji = get(msg.guild.emojis, id=841264991218040832)
+                except discord.NotFound:
+                    reac_emoji = "\U0001F44B"
                 embed.add_field(name="Notifcations:", value="If you want the Notification role simply react with "
-                                                            "<:IreliaHey:809038655510675516> on this message.\n"
+                                                            f"{reac_emoji} on this message.\n"
                                                             "Hope to see ya around!",
                                 inline=False)
 
-                msg: Message = await ctx.send(embed=embed)
-                await msg.add_reaction(await msg.guild.fetch_emoji(809038655510675516))
+                msg: Message = await welcome_channel.send(embed=embed)
+                await msg.add_reaction(reac_emoji)
                 self.channels_config["notification_msg"][str(ctx.guild.id)] = msg.id
                 __save_channels__(self.channels_config)
 

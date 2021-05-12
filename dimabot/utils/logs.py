@@ -8,7 +8,10 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from utils.env import VERBOSITY, SENTRY_ENVIRONMENT
 
 logging_handler = logging.StreamHandler(sys.stdout)
-logging_handler.setFormatter(logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s"))
+if VERBOSITY.upper() == "DEBUG":
+    logging_handler.setFormatter(logging.Formatter("[%(asctime)s] [%(module)s] [%(levelname)s] %(message)s"))
+else:
+    logging_handler.setFormatter(logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s"))
 
 
 def get_logger(name: str) -> logging.Logger:

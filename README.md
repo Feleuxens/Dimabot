@@ -12,8 +12,6 @@ Note: If you want to host it yourself you might need to change some hardcoded id
 
 
 ## Development
-
----
 ### Requirements
 
 - [Python](https://www.python.org/) >=3.8
@@ -52,8 +50,6 @@ hot-swapping support (you can change code and reload them without restarting the
 whole programm) located in the [extensions subfolder](dimabot/extensions).
 
 # Installation
-
----
 Docker support isn't added yet. For now, you can clone the repository and run it in 
 a [screen session](https://linuxize.com/post/how-to-use-linux-screen/) (if you don't
 want this just ignore the first command).
@@ -65,8 +61,6 @@ python dimabot/main.py
 ```
 
 # Environment variables
-
----
 | Variable | Description | Required? | Default |
 | :--- | :--- | :---: | :--- |
 | TOKEN | Discord Bot Token | :heavy_check_mark: |

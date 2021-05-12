@@ -22,3 +22,6 @@ class EasterEggs(commands.Cog):
     async def on_message(self, msg: Message):
         if "fuck you" in msg.content.lower():
             await msg.add_reaction("🖕")  # \ud83d\udd95
+
+        elif "dimabot i love you" == msg.content.lower():
+            await msg.add_reaction("\u2764")

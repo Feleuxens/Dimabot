@@ -63,6 +63,6 @@ python dimabot/main.py
 | :--- | :--- | :---: | :--- |
 | TOKEN | Discord Bot Token | :heavy_check_mark: |
 | VERBOSITY | Verbosity of console output. Possible values are `DEBUG`, `INFO`, `WARNING`, `ERROR` and `CRITICAL`. [See](https://discordpy.readthedocs.io/en/latest/logging.html) for more information. | :heavy_multiplication_x: | `INFO` |
-| 
+| | | | |
 | SENTRY_DSN | [Sentry DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/) if you want to track errors with SENTRY | :heavy_multiplication_x: | |
 | SENTRY_ENVIRONMENT | If you're using Sentry you can specify environment like `dev`, `production`, etc. | :heavy_multiplication_x: | `dev` |

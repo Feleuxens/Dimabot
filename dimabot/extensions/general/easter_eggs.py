@@ -23,5 +23,5 @@ class EasterEggs(commands.Cog):
         if "fuck you" in msg.content.lower():
             await msg.add_reaction("🖕")  # \ud83d\udd95
 
-        elif "dimabot i love you" == msg.content.lower():
+        elif msg.content.lower() == "dimabot i love you":
             await msg.add_reaction("\u2764")

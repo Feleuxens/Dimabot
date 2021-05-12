@@ -3,8 +3,6 @@
 Discord Bot for the server of vDimatrix
 
 ## How to add the bot to a server?
-
----
 Currently, the bot does not support multiple servers and won't until some neccessary 
 features are implemented. Feel free to host it yourself.
 

@@ -46,11 +46,10 @@ class CoreErrorHandler(commands.Cog):
         elif isinstance(error, errors.CommandNotFound):  # lowest children, Parent: CommandError, Level: 3
             if "." in error.args[0]:  # ignore message like "..."
                 return
-            else:
-                await ctx.send(
-                    embed=Embed(title="Something went wrong", description="Sorry, I do not know this command. "
-                                                                          "Perhaps you misspelled it?",
-                                color=colors.RED))
+            await ctx.send(
+                embed=Embed(title="Something went wrong", description="Sorry, I do not know this command. "
+                                                                      "Perhaps you misspelled it?",
+                            color=colors.RED))
 
         # Discord Exception -> CommandError -> CheckFailure -> NoPrivateMessage
         elif isinstance(error, errors.NoPrivateMessage):  # lowest children, Parent: CheckFailure, Level: 4

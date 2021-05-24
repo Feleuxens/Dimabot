@@ -12,7 +12,7 @@ Note: If you want to host it yourself you might need to change some hardcoded id
 ## Development
 ### Requirements
 
-- [Python](https://www.python.org/) >=3.8
+- [Python](https://www.python.org/) >=3.8 (you might need to adjust the Python version in the Pipfile)
 - [Pipenv](https://pypi.org/project/pipenv/)
 - [Git](https://git-scm.com/)
 

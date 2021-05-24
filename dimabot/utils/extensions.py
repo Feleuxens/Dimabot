@@ -1,7 +1,7 @@
 from discord import Embed, User
 from discord.ext.commands import Bot
 
-from utils.logs import get_logger
+from dimabot.utils.logs import get_logger
 
 logger = get_logger(__name__)
 

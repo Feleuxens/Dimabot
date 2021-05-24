@@ -5,7 +5,7 @@ import sentry_sdk
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
-from utils.env import VERBOSITY, SENTRY_ENVIRONMENT
+from dimabot.utils.env import VERBOSITY, SENTRY_ENVIRONMENT
 
 logging_handler = logging.StreamHandler(sys.stdout)
 if VERBOSITY.upper() == "DEBUG":

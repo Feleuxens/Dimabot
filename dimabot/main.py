@@ -41,7 +41,6 @@ async def _check_prefix(b: Bot, msg: Message):
 bot = Bot(command_prefix=_check_prefix, case_insensitive=True, intents=(Intents.all()), self_bot=False)
 bot.remove_command("help")  # remove standard help function
 
-
 extensions = (
     "general.welcome",
     "general.easter_eggs",
@@ -58,11 +57,6 @@ core = (
 )
 
 
-logger.debug("Loading core modules...")
-for cog in core:
-    bot.add_cog(cog)
-
-
 @bot.event
 async def on_error(*_, **__):
     # sentry_sdk.capture_exception()
@@ -74,13 +68,22 @@ async def on_ready():
     logger.info(f"Logged in as {bot.user} v{Config.VERSION}\n")
 
 
-load_extensions(
-    bot,
-    *extensions
-)
+def main():
+    logger.debug("Loading core modules...")
+    for cog in core:
+        bot.add_cog(cog)
 
-if SENTRY_DSN:
-    logger.debug("Initializing sentry")
-    setup_sentry(SENTRY_DSN, Config.NAME, Config.VERSION)
+    load_extensions(
+        bot,
+        *extensions
+    )
 
-bot.run(TOKEN)
+    if SENTRY_DSN:
+        logger.debug("Initializing sentry")
+        setup_sentry(SENTRY_DSN, Config.NAME, Config.VERSION)
+
+    bot.run(TOKEN)
+
+
+if __name__ == "__main__":
+    main()

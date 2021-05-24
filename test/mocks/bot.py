@@ -9,13 +9,10 @@ class MockBot:
 
     def load_extension(self, extension_name: str):
         self.loaded_extensions.append(extension_name)
-        return
 
     def unload_extension(self, extension_name: str):
         self.loaded_extensions.remove(extension_name)
-        return
 
     def reload_extension(self, extension_name: str):
         self.loaded_extensions.remove(extension_name)
         self.loaded_extensions.append(extension_name)
-        return

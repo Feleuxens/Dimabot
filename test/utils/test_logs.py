@@ -14,8 +14,10 @@ class TestLogger:
         self.logger = get_logger(__name__)
         assert self.logger.__getattribute__("name") == "test_logs"
 
-    def test_no_name(self):
+    @staticmethod
+    def test_no_name():
         pytest.raises(TypeError, get_logger)
 
-    def test_type_error(self):
+    @staticmethod
+    def test_type_error():
         pytest.raises(TypeError, get_logger, 1)

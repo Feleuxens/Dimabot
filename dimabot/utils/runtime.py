@@ -2,9 +2,9 @@ from discord import Status, User, Embed
 from discord.ext import commands
 from discord.ext.commands import Context, check_any, has_permissions, is_owner, Bot
 
-from dimabot.utils import colors
-from dimabot.utils.extensions import reload_extensions, unload_extensions
-from dimabot.utils.logs import get_logger
+from utils import colors
+from utils.extensions import reload_extensions, unload_extensions
+from utils.logs import get_logger
 
 logger = get_logger(__name__)
 

@@ -7,9 +7,9 @@ from discord import Embed, Message, Reaction, Member
 from discord.ext import commands
 from discord.ext.commands import Context, errors, Bot, has_guild_permissions
 
-from dimabot.utils import colors
-from dimabot.utils.config import Config, reload_prefixes
-from dimabot.utils.logs import get_logger
+from utils import colors
+from utils.config import Config, reload_prefixes
+from utils.logs import get_logger
 
 logger = get_logger(__name__)
 

@@ -8,8 +8,8 @@ from discord import Role, RawReactionActionEvent, PartialEmoji, Member, Embed, T
 from discord.ext.commands import Bot, has_guild_permissions, Context, errors, Cog, command
 from discord.utils import get
 
-from dimabot.utils import colors
-from dimabot.utils.logs import get_logger
+from utils import colors
+from utils.logs import get_logger
 
 logger = get_logger(__name__)
 

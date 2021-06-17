@@ -3,8 +3,8 @@ from discord import Embed
 from discord.ext import commands
 from discord.ext.commands import errors, CommandError, Context
 
-from dimabot.utils import colors
-from dimabot.utils.logs import get_logger
+from utils import colors
+from utils.logs import get_logger
 
 logger = get_logger(__name__)
 

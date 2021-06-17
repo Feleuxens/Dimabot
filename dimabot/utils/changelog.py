@@ -5,8 +5,8 @@ from discord import Embed
 from discord.ext import commands
 from discord.ext.commands import Context, Bot
 
-from dimabot.utils import colors
-from dimabot.utils.config import Config
+from utils import colors
+from utils.config import Config
 
 
 class CoreChangelog(commands.Cog):

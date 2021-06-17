@@ -2,14 +2,14 @@ from pathlib import Path
 from discord import Intents, Message
 from discord.ext.commands import Bot
 
-from dimabot.utils.changelog import CoreChangelog
-from dimabot.utils.config import load_config, Config
-from dimabot.utils.env import TOKEN, SENTRY_DSN
-from dimabot.utils.error_handling import CoreErrorHandler
-from dimabot.utils.extensions import load_extensions
-from dimabot.utils.logs import get_logger, setup_sentry
-from dimabot.utils.prefix import CorePrefix
-from dimabot.utils.runtime import CoreRuntime
+from utils.changelog import CoreChangelog
+from utils.config import load_config, Config
+from utils.env import TOKEN, SENTRY_DSN
+from utils.error_handling import CoreErrorHandler
+from utils.extensions import load_extensions
+from utils.logs import get_logger, setup_sentry
+from utils.prefix import CorePrefix
+from utils.runtime import CoreRuntime
 
 logger = get_logger(__name__)
 

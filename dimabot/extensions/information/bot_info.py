@@ -94,7 +94,7 @@ class BotInfo(commands.Cog):
             sock.shutdown(SHUT_RD)
         except (timeout, OSError):
             embed: Embed = Embed(title="Latency", description="An error ocurred while measuring latency "
-                                                              f"to discord.com", color=colors.YELLOW)
+                                                              "to discord.com", color=colors.YELLOW)
         else:
             embed = Embed(title="Ping", description=f"{int((time()-t) * 1000)}ms", color=colors.GREEN)
         await ctx.send(embed=embed)

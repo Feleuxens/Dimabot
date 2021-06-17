@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 aiohttp = "*"
-requests = "*"
 sentry-sdk = "*"
 python-dotenv = "*"
 PyYAML = "*"

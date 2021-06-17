@@ -1,4 +1,5 @@
-import time
+from socket import gethostbyname, SOCK_STREAM, AF_INET, socket, timeout, SHUT_RD
+from time import time
 
 from discord import Embed, ActivityType, Status, Activity, Game
 from discord.ext import commands, tasks
@@ -21,7 +22,7 @@ class BotInfo(commands.Cog):
         self.status_counter = 0
         self.bot: Bot = bot
         self.status_loop.start()
-        self.start_time = time.time()
+        self.start_time = time()
 
     def cog_unload(self):
         self.status_loop.cancel()
@@ -80,11 +81,33 @@ class BotInfo(commands.Cog):
     @commands.cooldown(2, 4, commands.BucketType.user)
     async def ping(self, ctx: Context):
         """
-        Displays latency of bot
+        Displays latency of bot to discord.com
         :param ctx: Current context
         :return: None
         """
-        embed = Embed(title="Ping", description=f"{int(ctx.bot.latency * 1000)}ms", color=colors.GREEN)
+        host = gethostbyname("discord.com")
+        sock = socket(AF_INET, SOCK_STREAM)
+        sock.settimeout(3)
+        t = time()
+        try:
+            sock.connect((host, 443))
+            sock.shutdown(SHUT_RD)
+        except (timeout, OSError):
+            embed: Embed = Embed(title="Latency", description=f"An error ocurred while measuring latency "
+                                                              f"to discord.com", color=colors.YELLOW)
+        else:
+            embed = Embed(title="Ping", description=f"{int((time()-t) * 1000)}ms", color=colors.GREEN)
+        await ctx.send(embed=embed)
+
+    @commands.command(name="latency")
+    @commands.cooldown(5, 2, commands.BucketType.user)
+    async def latency(self, ctx: Context):
+        """
+        Displays latency of Discord's WebSocket protocol latency
+        :param ctx: Cuurent context
+        :return: None
+        """
+        embed: Embed = Embed(title="Latency", description=f"{int(ctx.bot.latency * 1000)}ms", color=colors.GREEN)
         await ctx.send(embed=embed)
 
     @commands.command(name="version", aliases=["ver"])
@@ -116,7 +139,7 @@ class BotInfo(commands.Cog):
     @commands.command(name="uptime")
     @commands.cooldown(2, 3, commands.BucketType.user)
     async def uptime(self, ctx: Context):
-        uptime = round(time.time() - self.start_time)
+        uptime = round(time() - self.start_time)
         days = int(uptime / 86400)
         hours = int(uptime / 3600) % 24
         minutes = int(uptime / 60) % 60

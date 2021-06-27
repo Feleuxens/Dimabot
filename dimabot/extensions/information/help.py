@@ -26,10 +26,10 @@ class Help(Cog):
 
     @command(name="alias", aliases=["a", "aliases"])
     @cooldown(2, 3, BucketType.user)
-    async def alias(self, ctx: Context, command: str, *rest: str):
+    async def alias(self, ctx: Context, cmd: str, *rest: str):
         """
         Prints every alias to given comment
-        :param command:
+        :param cmd: Command to get alias for
         :param ctx: Current context
         :return: None
         """
@@ -37,11 +37,11 @@ class Help(Cog):
             raise TooManyArguments
 
         prefix = await current_prefix(ctx.guild.id)
-        parsed_command = ctx.bot.get_command(command)
+        parsed_command = ctx.bot.get_command(cmd)
         if parsed_command is not None:
             embed = Embed(title=f"Aliases for `{await current_prefix(ctx.guild.id)}{parsed_command}` are:",
-                          description=f"\n".join(prefix + alias for alias in parsed_command.aliases),
+                          description="\n".join(prefix + alias for alias in parsed_command.aliases),
                           color=colors.GREEN)
         else:
-            embed = Embed(title="Error", description=f"I don't know `{command}`", color=colors.GREEN)
+            embed = Embed(title="Error", description=f"I don't know `{cmd}`", color=colors.GREEN)
         await ctx.send(embed=embed)

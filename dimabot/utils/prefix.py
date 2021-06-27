@@ -1,4 +1,4 @@
-from asyncio import TimeoutError
+from asyncio import TimeoutError as asyncTimeoutError
 from pathlib import Path
 
 from sentry_sdk import capture_message
@@ -42,7 +42,7 @@ class CorePrefix(Cog):
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)  # skipcq: PYL-W0612
-        except TimeoutError:
+        except asyncTimeoutError:
             await ctx.send("Action cancelled!")
         else:
             if reaction.emoji == "\u2705":
@@ -84,9 +84,6 @@ class CorePrefix(Cog):
 
 async def current_prefix(guild_id: int = None) -> str:
     logger.debug(f"Grabbing current prefix from guild: {guild_id}")
-    if guild_id is None:
-        return Config.DEFAULT_PREFIX
-    elif guild_id in Config.SERVER_PREFIXES:
+    if guild_id is not None and guild_id in Config.SERVER_PREFIXES:
         return Config.SERVER_PREFIXES.get(guild_id)
-    else:
-        return Config.DEFAULT_PREFIX
+    return Config.DEFAULT_PREFIX

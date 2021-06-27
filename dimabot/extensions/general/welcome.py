@@ -1,4 +1,4 @@
-from asyncio import TimeoutError
+from asyncio import TimeoutError as asyncTimeoutError
 from json import dump, load
 from pathlib import Path
 from typing import Union
@@ -72,7 +72,7 @@ class WelcomeChannel(Cog):
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)  # skipcq: PYL-W0612
-        except TimeoutError:
+        except asyncTimeoutError:
             await ctx.send("Action cancelled!")
         else:
             if reaction.emoji == "\u2705":

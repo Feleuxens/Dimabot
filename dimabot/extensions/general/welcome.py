@@ -1,10 +1,9 @@
-import asyncio
-import json
+from asyncio import TimeoutError
+from json import dump, load
 from pathlib import Path
 from typing import Union
 
-import discord
-from discord import Role, RawReactionActionEvent, PartialEmoji, Member, Embed, TextChannel, Message, Reaction
+from discord import Role, RawReactionActionEvent, PartialEmoji, Member, Embed, TextChannel, Message, Reaction, NotFound
 from discord.ext.commands import Bot, has_guild_permissions, Context, errors, Cog, command
 from discord.utils import get
 
@@ -42,7 +41,7 @@ class WelcomeChannel(Cog):
         if isinstance(channel, int):
             try:
                 welcome_channel: TextChannel = await self.bot.fetch_channel(channel)
-            except discord.NotFound:
+            except NotFound:
                 raise errors.ChannelNotFound(f"{channel}")
         elif isinstance(channel, TextChannel):
             welcome_channel: TextChannel = channel
@@ -52,7 +51,7 @@ class WelcomeChannel(Cog):
         if isinstance(guidelines, int):
             try:
                 guidelines_channel: TextChannel = await self.bot.fetch_channel(guidelines)
-            except discord.NotFound:
+            except NotFound:
                 raise errors.ChannelNotFound(f"{guidelines}")
         elif isinstance(guidelines, TextChannel):
             guidelines_channel: TextChannel = guidelines
@@ -73,7 +72,7 @@ class WelcomeChannel(Cog):
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)  # skipcq: PYL-W0612
-        except asyncio.TimeoutError:
+        except TimeoutError:
             await ctx.send("Action cancelled!")
         else:
             if reaction.emoji == "\u2705":
@@ -91,7 +90,7 @@ class WelcomeChannel(Cog):
 
                 try:
                     reac_emoji = get(msg.guild.emojis, id=841264991218040832)
-                except discord.NotFound:
+                except NotFound:
                     reac_emoji = "\U0001F44B"
                 embed.add_field(name="Notifcations:", value="If you want the Notification role simply react with "
                                                             f"{reac_emoji} on this message.\n"
@@ -133,17 +132,17 @@ class WelcomeChannel(Cog):
 
 def __save_channels__(channels_config):
     with open("channels.json", "w") as f:
-        json.dump(channels_config, f)
+        dump(channels_config, f)
 
 
 def __load_channels__():
     channels: dict = {"welcome": {"0": 0}, "guidelines": {"0": 0}, "notification_msg": {"0": 0}}  # default value
     try:
         with open(Path("channels.json"), "r") as f:
-            channels = json.load(f)
+            channels = load(f)
     except FileNotFoundError:  # create file if not found
         with open(Path("channels.json"), "w") as f:
             logger.debug("No channels.json found. Creating one with default values.")
             # server id: channel or message id
-            json.dump(channels, f)
+            dump(channels, f)
     return channels

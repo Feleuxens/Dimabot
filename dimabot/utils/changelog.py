@@ -1,27 +1,26 @@
-import json
+from json import load
 from pathlib import Path
 
 from discord import Embed
-from discord.ext import commands
-from discord.ext.commands import Context, Bot
+from discord.ext.commands import Context, Bot, Cog, group, cooldown, BucketType
 
 from utils import colors
 from utils.config import Config
 
 
-class CoreChangelog(commands.Cog):
+class CoreChangelog(Cog):
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
         self.data_found: bool = False
         try:
             with open(Path("dimabot/utils/changelog.json"), "r", encoding="utf-8") as f:
-                self.changelog_data: dict = json.load(f)
+                self.changelog_data: dict = load(f)
                 self.data_found = True
         except IOError:
             print("No changelog.json was found. Changelog command won't be useable.")
 
-    @commands.group(name="changelog", aliases=["ch", "change"], invoke_without_command=True)
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @group(name="changelog", aliases=["ch", "change"], invoke_without_command=True)
+    @cooldown(2, 3, BucketType.user)
     async def changelog(self, ctx: Context, value: str = None):
         if not self.data_found:
             return
@@ -50,7 +49,7 @@ class CoreChangelog(commands.Cog):
         await ctx.send(embed=embed)
 
     @changelog.command(name="list", aliases=["l"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @cooldown(2, 3, BucketType.user)
     async def changelog_list(self, ctx: Context):
         if not self.data_found:
             return

@@ -2,8 +2,8 @@ from socket import gethostbyname, SOCK_STREAM, AF_INET, socket, timeout, SHUT_RD
 from time import time
 
 from discord import Embed, ActivityType, Status, Activity, Game
-from discord.ext import commands, tasks
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, command, cooldown, BucketType, Cog
+from discord.ext.tasks import loop
 
 from utils import colors
 from utils.config import Config
@@ -17,7 +17,7 @@ def teardown(bot: Bot):
     bot.remove_cog("BotInfo")
 
 
-class BotInfo(commands.Cog):
+class BotInfo(Cog):
     def __init__(self, bot):
         self.status_counter = 0
         self.bot: Bot = bot
@@ -27,7 +27,7 @@ class BotInfo(commands.Cog):
     def cog_unload(self):
         self.status_loop.cancel()
 
-    @tasks.loop(seconds=30)
+    @loop(seconds=30)
     async def status_loop(self):
         if self.status_counter == 0:
             await self.bot.change_presence(status=Status.online,
@@ -47,8 +47,8 @@ class BotInfo(commands.Cog):
     async def before_update_status(self):
         await self.bot.wait_until_ready()
 
-    @commands.command(name="about", aliases=["info", "infos", "whomadethisshit"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="about", aliases=["info", "infos", "whomadethisshit"])
+    @cooldown(2, 3, BucketType.user)
     async def about(self, ctx: Context):
         """
         Prints information about the bot
@@ -77,8 +77,8 @@ class BotInfo(commands.Cog):
                         inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(name="ping", aliases=["p"])
-    @commands.cooldown(2, 4, commands.BucketType.user)
+    @command(name="ping", aliases=["p"])
+    @cooldown(2, 4, BucketType.user)
     async def ping(self, ctx: Context):
         """
         Displays latency of bot to discord.com
@@ -99,8 +99,8 @@ class BotInfo(commands.Cog):
             embed = Embed(title="Ping", description=f"{int((time()-t) * 1000)}ms", color=colors.GREEN)
         await ctx.send(embed=embed)
 
-    @commands.command(name="latency")
-    @commands.cooldown(5, 2, commands.BucketType.user)
+    @command(name="latency")
+    @cooldown(5, 2, BucketType.user)
     async def latency(self, ctx: Context):
         """
         Displays latency of Discord's WebSocket protocol latency
@@ -110,8 +110,8 @@ class BotInfo(commands.Cog):
         embed: Embed = Embed(title="Latency", description=f"{int(ctx.bot.latency * 1000)}ms", color=colors.GREEN)
         await ctx.send(embed=embed)
 
-    @commands.command(name="version", aliases=["ver"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="version", aliases=["ver"])
+    @cooldown(2, 3, BucketType.user)
     async def version(self, ctx: Context):
         """
         Displays current version of bot
@@ -121,8 +121,8 @@ class BotInfo(commands.Cog):
         embed = Embed(title="Version", description=f"{Config.VERSION}", color=colors.GREEN)
         await ctx.send(embed=embed)
 
-    @commands.command(name="contributor", aliases=["contributors"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="contributor", aliases=["contributors"])
+    @cooldown(2, 3, BucketType.user)
     async def contributor(self, ctx: Context):
         """
         Displays all Contributor
@@ -136,8 +136,8 @@ class BotInfo(commands.Cog):
                       )
         await ctx.send(embed=embed)
 
-    @commands.command(name="uptime")
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="uptime")
+    @cooldown(2, 3, BucketType.user)
     async def uptime(self, ctx: Context):
         uptime = round(time() - self.start_time)
         days = int(uptime / 86400)

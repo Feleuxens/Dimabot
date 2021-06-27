@@ -1,6 +1,5 @@
 from discord import Embed, Guild, Status
-from discord.ext import commands
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, guild_only, group, cooldown, BucketType, Cog
 
 from utils import colors
 
@@ -13,11 +12,11 @@ def teardown(bot: Bot):
     bot.remove_cog("ServerInfo")
 
 
-class ServerInfo(commands.Cog):
+class ServerInfo(Cog):
 
-    @commands.group(name="server", aliases=["s", "serverinfo"], invoke_without_command=True)
-    @commands.guild_only()
-    @commands.cooldown(2, 5, commands.BucketType.user)
+    @group(name="server", aliases=["s", "serverinfo"], invoke_without_command=True)
+    @guild_only()
+    @cooldown(2, 5, BucketType.user)
     async def server_info(self, ctx: Context):
         """
         Prints specific information about the server like members, owner, creation date...
@@ -49,7 +48,7 @@ class ServerInfo(commands.Cog):
         await ctx.send(embed=embed)
 
     @server_info.command(name="bots", aliases=["bot"])
-    @commands.guild_only()
+    @guild_only()
     async def server_bots(self, ctx: Context):
         """
         Display a list of all bots with online status

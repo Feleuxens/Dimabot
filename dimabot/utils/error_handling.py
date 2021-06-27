@@ -1,7 +1,6 @@
 import sentry_sdk
 from discord import Embed
-from discord.ext import commands
-from discord.ext.commands import errors, CommandError, Context
+from discord.ext.commands import errors, CommandError, Context, Cog
 
 from utils import colors
 from utils.logs import get_logger
@@ -9,8 +8,8 @@ from utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class CoreErrorHandler(commands.Cog):
-    @commands.Cog.listener()
+class CoreErrorHandler(Cog):
+    @Cog.listener()
     async def on_command_error(self, ctx: Context, error: CommandError):
         # exception have to be ordered from child to parent in exception hierarchy
         logger.debug(error)

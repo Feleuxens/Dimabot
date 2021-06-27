@@ -1,6 +1,5 @@
 from discord import Status, User, Embed
-from discord.ext import commands
-from discord.ext.commands import Context, check_any, has_permissions, is_owner, Bot
+from discord.ext.commands import Context, check_any, has_permissions, is_owner, Bot, Cog, command
 
 from utils import colors
 from utils.extensions import reload_extensions, unload_extensions
@@ -9,12 +8,12 @@ from utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class CoreRuntime(commands.Cog):
+class CoreRuntime(Cog):
     def __init__(self, b: Bot, *initial_extensions):
         self.bot: Bot = b
         self.extensions = initial_extensions
 
-    @commands.command(name="reload", aliases=["reloadcog", "reloadcogs"])
+    @command(name="reload", aliases=["reloadcog", "reloadcogs"])
     @check_any(is_owner(), has_permissions(administrator=True))
     async def reload(self, ctx: Context, extension: str = None):
         """
@@ -35,7 +34,7 @@ class CoreRuntime(commands.Cog):
                           color=colors.YELLOW)
         await ctx.send(embed=embed)
 
-    @commands.command(name="shutdown")
+    @command(name="shutdown")
     @is_owner()
     async def shutdown(self, ctx: Context):
         await ctx.send(embed=Embed(title="Shutting down...", description="Goodbye!"))
@@ -45,7 +44,7 @@ class CoreRuntime(commands.Cog):
         await self.bot.change_presence(status=Status.offline)
         await self.bot.close()
 
-    @commands.command(name="restart", aliases=["reboot"], enabled=False)
+    @command(name="restart", aliases=["reboot"], enabled=False)
     @is_owner()
     async def restart(self, ctx: Context):
         await ctx.send(embed=Embed(title="Restarting!", description="This may take a few seconds..."))

@@ -1,6 +1,5 @@
 from discord import Embed
-from discord.ext import commands
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, TooManyArguments, BucketType, cooldown, command, Cog
 
 from utils import colors
 
@@ -13,10 +12,10 @@ def teardown(bot: Bot):
     bot.remove_cog("Help")
 
 
-class Help(commands.Cog):
+class Help(Cog):
 
-    @commands.command(name="help", aliases=["h", "pls"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="help", aliases=["h", "pls"])
+    @cooldown(2, 3, BucketType.user)
     async def help(self, ctx: Context, entity: str = None):
         if entity is None:
             await ctx.send_help()
@@ -24,8 +23,8 @@ class Help(commands.Cog):
             await ctx.send_help(entity)
         await ctx.send("This is Discord's standard help function. A more beautiful version will be implemented soon")
 
-    @commands.command(name="alias", aliases=["a", "aliases"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="alias", aliases=["a", "aliases"])
+    @cooldown(2, 3, BucketType.user)
     async def alias(self, ctx: Context, command: str, *rest: str):
         """
         Prints every alias to given comment
@@ -34,7 +33,7 @@ class Help(commands.Cog):
         :return: None
         """
         if len(rest) >= 1:
-            raise commands.TooManyArguments
+            raise TooManyArguments
 
         parsed_command = ctx.bot.get_command(command)
         if parsed_command is not None:

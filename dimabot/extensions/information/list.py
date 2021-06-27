@@ -1,5 +1,4 @@
-from discord.ext import commands
-from discord.ext.commands import Context, Bot
+from discord.ext.commands import Context, Bot, command, Cog
 
 
 def setup(bot: Bot):
@@ -10,9 +9,9 @@ def teardown(bot: Bot):
     bot.remove_cog("List")
 
 
-class List(commands.Cog):
+class List(Cog):
 
-    @commands.command(name="list", aliases=["l"], enabled=False)
+    @command(name="list", aliases=["l"], enabled=False)
     async def list(self, ctx: Context, argument: str = None):
         """
         Get a list of server properties (not implemented).

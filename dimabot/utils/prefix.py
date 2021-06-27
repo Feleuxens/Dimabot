@@ -1,24 +1,24 @@
-import asyncio
+from asyncio import TimeoutError
 from pathlib import Path
 
-import sentry_sdk
-import yaml
+from sentry_sdk import capture_message
+from yaml import safe_load, safe_dump
 from discord import Embed, Message, Reaction, Member
-from discord.ext import commands
-from discord.ext.commands import Context, errors, Bot, has_guild_permissions
+from discord.ext.commands import Context, errors, Bot, has_guild_permissions, group, Cog
 
 from utils import colors
 from utils.config import Config, reload_prefixes
+from utils.env import SENTRY_DSN
 from utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
-class CorePrefix(commands.Cog):
+class CorePrefix(Cog):
     def __init__(self, b: Bot):
         self.bot: Bot = b
 
-    @commands.group(name="prefix", invoke_without_command=True)
+    @group(name="prefix", invoke_without_command=True)
     async def prefix(self, ctx: Context):
         pre = Config.DEFAULT_PREFIX
         if ctx.guild is not None and ctx.guild.id in Config.SERVER_PREFIXES:
@@ -43,7 +43,7 @@ class CorePrefix(commands.Cog):
 
         try:
             reaction, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check)  # skipcq: PYL-W0612
-        except asyncio.TimeoutError:
+        except TimeoutError:
             await ctx.send("Action cancelled!")
         else:
             if reaction.emoji == "\u2705":
@@ -58,7 +58,8 @@ class CorePrefix(commands.Cog):
                     await ctx.send(embed=Embed(title="Something went wrong",
                                                description="Something went wrong while changing the prefix. "
                                                            "An report was filed.", color=colors.YELLOW))
-                    sentry_sdk.capture_message("Failed saving custom prefix!", level="error")
+                    if SENTRY_DSN:  # check if sentry dsn is set -> sentry is available
+                        capture_message("Failed saving custom prefix!", level="error")
             if reaction.emoji == "\u274c":
                 await ctx.send("Action cancelled!")
                 return
@@ -67,12 +68,13 @@ class CorePrefix(commands.Cog):
     async def __save_prefix__(new_prefix: str, server_id: int):
         try:
             with open(Path("config.yml"), "r") as f:
-                config = yaml.safe_load(f)
+                config = safe_load(f)
 
             config["prefix"]["server"][server_id] = new_prefix
 
             with open(Path("config.yml"), "w") as f:
-                yaml.safe_dump(config, f)
+                safe_dump(config, f)
+            logger.debug("Saved new prefix.")
             return True
 
         except FileNotFoundError:

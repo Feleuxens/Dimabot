@@ -6,6 +6,7 @@ from discord.ext.commands import Context, Bot, Cog, group, cooldown, BucketType
 
 from utils import colors
 from utils.config import Config
+from utils.prefix import current_prefix
 
 
 class CoreChangelog(Cog):
@@ -44,7 +45,7 @@ class CoreChangelog(Cog):
             embed = Embed(title="Changelog", color=colors.YELLOW)
             embed.description = f"Cannot find changelog for v{version}"
 
-        embed.add_field(name="Tip:", value=f"Use `{Config.DEFAULT_PREFIX}changelog list` for a list of all releases.",
+        embed.add_field(name="Tip:", value=f"Use `{await current_prefix()}changelog list` for a list of all releases.",
                         inline=False)
         await ctx.send(embed=embed)
 

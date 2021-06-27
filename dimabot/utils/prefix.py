@@ -20,11 +20,10 @@ class CorePrefix(Cog):
 
     @group(name="prefix", invoke_without_command=True)
     async def prefix(self, ctx: Context):
-        pre = Config.DEFAULT_PREFIX
-        if ctx.guild is not None and ctx.guild.id in Config.SERVER_PREFIXES:
-            pre = Config.SERVER_PREFIXES.get(ctx.guild.id)
         await ctx.send(
-            embed=Embed(title="Prefix", description=f"Prefix is currently set to `{pre}`", color=colors.GREEN))
+            embed=Embed(title="Prefix",
+                        description=f"Prefix is currently set to `{await current_prefix(ctx.guild.id)}`",
+                        color=colors.GREEN))
 
     @prefix.command(name="set")
     @has_guild_permissions(administrator=True)
@@ -81,3 +80,13 @@ class CorePrefix(Cog):
             logger.critical("Prefix could not be saved because config.yml missing.")
             # print(exc)
             return False
+
+
+async def current_prefix(guild_id: int = None) -> str:
+    logger.debug(f"Grabbing current prefix from guild: {guild_id}")
+    if guild_id is None:
+        return Config.DEFAULT_PREFIX
+    elif guild_id in Config.SERVER_PREFIXES:
+        return Config.SERVER_PREFIXES.get(guild_id)
+    else:
+        return Config.DEFAULT_PREFIX

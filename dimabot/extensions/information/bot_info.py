@@ -7,6 +7,7 @@ from discord.ext.tasks import loop
 
 from utils import colors
 from utils.config import Config
+from utils.prefix import current_prefix
 
 
 def setup(bot: Bot):
@@ -55,10 +56,7 @@ class BotInfo(Cog):
         :param ctx: Current context
         :return: None
         """
-        if ctx.guild is None or ctx.guild.id not in Config.SERVER_PREFIXES:
-            prefix = Config.DEFAULT_PREFIX
-        else:
-            prefix = Config.SERVER_PREFIXES.get(ctx.guild.id)
+        prefix: str = await current_prefix(ctx.guild.id)
 
         embed = Embed(
             title="Dimabot",

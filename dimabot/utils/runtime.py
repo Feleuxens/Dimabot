@@ -1,3 +1,5 @@
+from time import time
+
 from discord import Status, User, Embed
 from discord.ext.commands import Context, check_any, has_permissions, is_owner, Bot, Cog, command
 
@@ -12,6 +14,7 @@ class CoreRuntime(Cog):
     def __init__(self, b: Bot, *initial_extensions):
         self.bot: Bot = b
         self.extensions = initial_extensions
+        self.start_time = time()
 
     @command(name="reload", aliases=["reloadcog", "reloadcogs"])
     @check_any(is_owner(), has_permissions(administrator=True))
@@ -50,3 +53,19 @@ class CoreRuntime(Cog):
         await ctx.send(embed=Embed(title="Restarting!", description="This may take a few seconds..."))
         logger.info("Restarting bot...\n")
         await self.bot.close()
+
+    @command(name="uptime")
+    async def uptime(self, ctx: Context) -> None:
+        """
+        Prints the time the bot is already running
+        :param ctx: Current context
+        :return: None
+        """
+        uptime = round(time() - self.start_time)
+        days = int(uptime / 86400)
+        hours = int(uptime / 3600) % 24
+        minutes = int(uptime / 60) % 60
+        seconds = uptime % 60
+        await ctx.send(embed=Embed(title="Uptime",
+                                   description=f"Running for {days}:{hours}:{minutes}:{seconds}",
+                                   color=colors.GREEN))

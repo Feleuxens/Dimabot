@@ -23,7 +23,6 @@ class BotInfo(Cog):
         self.status_counter = 0
         self.bot: Bot = bot
         self.status_loop.start()
-        self.start_time = time()
 
     def cog_unload(self):
         self.status_loop.cancel()
@@ -133,15 +132,3 @@ class BotInfo(Cog):
                       color=colors.GREEN
                       )
         await ctx.send(embed=embed)
-
-    @command(name="uptime")
-    @cooldown(2, 3, BucketType.user)
-    async def uptime(self, ctx: Context):
-        uptime = round(time() - self.start_time)
-        days = int(uptime / 86400)
-        hours = int(uptime / 3600) % 24
-        minutes = int(uptime / 60) % 60
-        seconds = uptime % 60
-        await ctx.send(embed=Embed(title="Uptime",
-                                   description=f"Running for {days}:{hours}:{minutes}:{seconds}",
-                                   color=colors.GREEN))

@@ -18,9 +18,18 @@ def teardown(bot: Bot):
     bot.remove_cog("BotInfo")
 
 
-class BotInfo(Cog):
+class BotInfo(Cog, name="Bot Info"):
+    """
+    Cog providing an interface for information about the bot itself and
+    controls the bots' status via a task loop.
+
+    Attributes:
+    -----------
+    bot: `discord.command.ext.Bot`
+    status_counter: `int`
+    """
     def __init__(self, bot):
-        self.status_counter = 0
+        self.status_counter: int = 0
         self.bot: Bot = bot
         self.status_loop.start()
 
@@ -49,7 +58,7 @@ class BotInfo(Cog):
 
     @command(name="about", aliases=["info", "infos", "whomadethisshit"])
     @cooldown(2, 3, BucketType.user)
-    async def about(self, ctx: Context):
+    async def about(self, ctx: Context) -> None:
         """
         Prints information about the bot
         :param ctx: Current context
@@ -76,7 +85,7 @@ class BotInfo(Cog):
 
     @command(name="ping", aliases=["p"])
     @cooldown(2, 4, BucketType.user)
-    async def ping(self, ctx: Context):
+    async def ping(self, ctx: Context) -> None:
         """
         Displays latency of bot to discord.com
         :param ctx: Current context

@@ -11,6 +11,9 @@ def teardown(bot: Bot):
 
 
 class EasterEggs(Cog):
+    """
+    Cog containing some easter eggas
+    """
 
     @command(name="useless", hidden=True)
     @cooldown(2, 1, BucketType.user)

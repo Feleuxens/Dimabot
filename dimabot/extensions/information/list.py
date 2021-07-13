@@ -10,6 +10,9 @@ def teardown(bot: Bot):
 
 
 class List(Cog):
+    """
+    Cog providing commands for lists about various server or bot properties
+    """
 
     @command(name="list", aliases=["l"], enabled=False)
     async def list(self, ctx: Context, argument: str = None):

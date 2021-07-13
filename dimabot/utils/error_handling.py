@@ -9,10 +9,14 @@ logger = get_logger(__name__)
 
 
 class CoreErrorHandler(Cog):
+    """
+    Cog handling (almost) all command errors
+    """
+
     @Cog.listener()
     async def on_command_error(self, ctx: Context, error: CommandError):
         # exception have to be ordered from child to parent in exception hierarchy
-        logger.debug(error)
+        # logger.debug(error)
 
         # Discord Exception -> CommandError -> UserInputError -> MissingRequiredArgument
         if isinstance(error, errors.MissingRequiredArgument):  # lowest children, Parent: UserInputError, Level: 4

@@ -1,4 +1,5 @@
 from time import time
+from typing import Tuple
 
 from discord import Status, User, Embed
 from discord.ext.commands import Context, check_any, has_permissions, is_owner, Bot, Cog, command
@@ -10,11 +11,20 @@ from utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class CoreRuntime(Cog):
-    def __init__(self, b: Bot, *initial_extensions):
-        self.bot: Bot = b
-        self.extensions = initial_extensions
-        self.start_time = time()
+class CoreRuntime(Cog, name="Runtime"):
+    """
+    Cog providing an interface for the runtime.
+
+    Attributes:
+    -----------
+    bot: `discord.ext.commands.Bot`
+    extensions: `Tuple[str]`
+    start_time: `float`
+    """
+    def __init__(self, bot: Bot, *initial_extensions: str):
+        self.bot: Bot = bot
+        self.extensions: Tuple[str] = initial_extensions
+        self.start_time: float = time()
 
     @command(name="reload", aliases=["reloadcog", "reloadcogs"])
     @check_any(is_owner(), has_permissions(administrator=True))
@@ -39,7 +49,12 @@ class CoreRuntime(Cog):
 
     @command(name="shutdown")
     @is_owner()
-    async def shutdown(self, ctx: Context):
+    async def shutdown(self, ctx: Context) -> None:
+        """
+        Gracefully stops the bot
+        :param ctx:
+        :return:
+        """
         await ctx.send(embed=Embed(title="Shutting down...", description="Goodbye!"))
         print("")
         unload_extensions(self.bot, *self.extensions)
@@ -49,7 +64,12 @@ class CoreRuntime(Cog):
 
     @command(name="restart", aliases=["reboot"], enabled=False)
     @is_owner()
-    async def restart(self, ctx: Context):
+    async def restart(self, ctx: Context) -> None:
+        """
+        (Not implemented yet) Restarts and re-initializes the bot
+        :param ctx: Current context
+        :return: None
+        """
         await ctx.send(embed=Embed(title="Restarting!", description="This may take a few seconds..."))
         logger.info("Restarting bot...\n")
         await self.bot.close()

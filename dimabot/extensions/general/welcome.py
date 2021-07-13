@@ -21,7 +21,15 @@ def teardown(bot: Bot):
     bot.remove_cog("WelcomeChannel")
 
 
-class WelcomeChannel(Cog):
+class WelcomeChannel(Cog, name="Welcome Channel"):
+    """
+    Cog handling a welcome channel with greeting message
+
+    Attributes:
+    -----------
+    bot: `discord.ext.commands.Bot`
+    channels_config: `Dict`
+    """
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
         # Note: This information will only be save this way until db support was added

@@ -6,7 +6,13 @@ from utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-def load_extensions(bot: Bot, *extensions: str):
+def load_extensions(bot: Bot, *extensions: str) -> None:
+    """
+    Loads extensions and adds them to given bot
+    :param bot: Bot to add extensions to
+    :param extensions: Tuple of strings of paths within subfolder of extensions folder
+    :return: None
+    """
     for extension in extensions:
         bot.load_extension("extensions." + extension)
         logger.info(f"Loaded {extension}")
@@ -15,13 +21,26 @@ def load_extensions(bot: Bot, *extensions: str):
         logger.info(f"* {cog}")
 
 
-def unload_extensions(bot: Bot, *extensions: str):
+def unload_extensions(bot: Bot, *extensions: str) -> None:
+    """
+    Unloads extensions from bot
+    :param bot: Bot to remove extensions from
+    :param extensions: Tuple of strings of paths within subfolder of extensions folder
+    :return: None
+    """
     for extension in extensions:
         bot.unload_extension("extensions." + extension)
         logger.info(f"Unloaded {extension}")
 
 
-async def reload_extensions(bot: Bot, author: User, *extensions: str):
+async def reload_extensions(bot: Bot, author: User, *extensions: str) -> Embed:
+    """
+    Reloads given extensions
+    :param bot: Bot to reload extensions from
+    :param author: User who invoked reloading
+    :param extensions: Extensions to reload
+    :return: None
+    """
     reloaded_extensions = []
     for extension in extensions:
         bot.reload_extension("extensions." + extension)

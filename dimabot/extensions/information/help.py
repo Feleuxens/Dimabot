@@ -1,5 +1,8 @@
-from discord import Embed
-from discord.ext.commands import Bot, Context, TooManyArguments, BucketType, cooldown, command, Cog
+from typing import Optional, List
+
+from discord import Embed, HTTPException
+from discord.ext.commands import Bot, Context, BucketType, cooldown, command, Cog, Command, CommandError, check_any, \
+    is_owner, has_permissions
 
 from utils import colors
 from utils.prefix import current_prefix
@@ -14,6 +17,9 @@ def teardown(bot: Bot):
 
 
 class Help(Cog):
+    """
+    Cog providing an interface for help about all available commands or cogs.
+    """
 
     @command(name="help", aliases=["h", "pls"])
     @cooldown(2, 3, BucketType.user)
@@ -25,8 +31,8 @@ class Help(Cog):
         await ctx.send("This is Discord's standard help function. A more beautiful version will be implemented soon")
 
     @command(name="alias", aliases=["a", "aliases"])
-    @cooldown(2, 3, BucketType.user)
-    async def alias(self, ctx: Context, cmd: str, *rest: str):
+    @cooldown(2, 5, BucketType.user)
+    async def alias(self, ctx: Context, *, cmd: str) -> None:
         """
         Prints every alias to given comment
         :param cmd: Command to get alias for

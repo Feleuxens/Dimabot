@@ -1,5 +1,6 @@
 from json import load
 from pathlib import Path
+from typing import Optional
 
 from discord import Embed
 from discord.ext.commands import Context, Bot, Cog, group, cooldown, BucketType
@@ -9,7 +10,15 @@ from utils.config import Config
 from utils.prefix import current_prefix
 
 
-class CoreChangelog(Cog):
+class CoreChangelog(Cog, name="Changelog"):
+    """
+    Cog providing an interface to get changelog information
+
+    Attributes:
+    -----------
+    bot: `discord.ext.commands.Bot`
+    data_found: `bool`
+    """
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
         self.data_found: bool = False
@@ -22,7 +31,13 @@ class CoreChangelog(Cog):
 
     @group(name="changelog", aliases=["ch", "change"], invoke_without_command=True)
     @cooldown(2, 3, BucketType.user)
-    async def changelog(self, ctx: Context, value: str = None):
+    async def changelog(self, ctx: Context, version: Optional[str]) -> None:
+        """
+        Prints changelog of current or specified version
+        :param ctx: Current context
+        :param version: [Optional] Version to get the changelog for
+        :return: None
+        """
         if not self.data_found:
             return
 
@@ -42,7 +57,7 @@ class CoreChangelog(Cog):
                 embed.add_field(name="Removed:",
                                 value="\n".join(":small_red_triangle:" + n for n in changelog["removed"]))
         else:
-            embed = Embed(title="Changelog", color=colors.YELLOW)
+            embed: Embed = Embed(title="Changelog", color=colors.YELLOW)
             embed.description = f"Cannot find changelog for v{version}"
 
         embed.add_field(name="Tip:", value=f"Use `{await current_prefix()}changelog list` for a list of all releases.",
@@ -50,8 +65,13 @@ class CoreChangelog(Cog):
         await ctx.send(embed=embed)
 
     @changelog.command(name="list", aliases=["l"])
-    @cooldown(2, 3, BucketType.user)
-    async def changelog_list(self, ctx: Context):
+    @cooldown(2, 5, BucketType.user)
+    async def changelog_list(self, ctx: Context) -> None:
+        """
+        Prints every release
+        :param ctx: Current context
+        :return: None
+        """
         if not self.data_found:
             return
         releases = self.changelog_data.keys()

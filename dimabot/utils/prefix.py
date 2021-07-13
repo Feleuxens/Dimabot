@@ -1,10 +1,11 @@
 from asyncio import TimeoutError as asyncTimeoutError
 from pathlib import Path
+from typing import Optional, Union
 
+from discord import Embed, Message, Reaction, Member, Guild
+from discord.ext.commands import Context, Bot, has_guild_permissions, group, Cog
 from sentry_sdk import capture_message
 from yaml import safe_load, safe_dump
-from discord import Embed, Message, Reaction, Member
-from discord.ext.commands import Context, errors, Bot, has_guild_permissions, group, Cog
 
 from utils import colors
 from utils.config import Config, reload_prefixes
@@ -14,25 +15,41 @@ from utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class CorePrefix(Cog):
-    def __init__(self, b: Bot):
-        self.bot: Bot = b
+class CorePrefix(Cog, name="Prefix"):
+    """
+    Cog providing an interface to set and get dynamic prefixes per guild
+
+    Attributes:
+    -----------
+    bot: `discord.ext.commandsBot`
+    """
+    def __init__(self, bot: Bot):
+        self.bot: Bot = bot
 
     @group(name="prefix", invoke_without_command=True)
-    async def prefix(self, ctx: Context):
+    async def prefix(self, ctx: Context) -> None:
+        """
+        Prints current prefix of server or dm channel
+        :param ctx: Current context
+        :return: None
+        """
         await ctx.send(
             embed=Embed(title="Prefix",
                         description=f"Prefix is currently set to `{await current_prefix(ctx.guild.id)}`",
                         color=colors.GREEN))
 
-    @prefix.command(name="set")
+    @prefix.command(name="set", ignore_rest=False)
     @has_guild_permissions(administrator=True)
-    async def prefix_set(self, ctx: Context, pre: str, *rest: str):
-        if len(rest) > 0:
-            raise errors.UserInputError
-
+    async def prefix_set(self, ctx: Context, new_prefix: str) -> None:
+        """
+        Sets a new prefix for current server
+        :param ctx: Current context
+        :param new_prefix: New prefix to set
+        :return: None
+        """
         msg: Message = await ctx.send(embed=Embed(title="Change prefix",
-                                                  description=f"Are you sure you want change your prefix to `{pre}` ?",
+                                                  description=f"Are you sure you want change your "
+                                                              f"prefix to `{new_prefix}` ?",
                                                   color=colors.GREEN))
         await msg.add_reaction("\u2705")  # white check mark
         await msg.add_reaction("\u274c")  # x
@@ -46,7 +63,7 @@ class CorePrefix(Cog):
             await ctx.send("Action cancelled!")
         else:
             if reaction.emoji == "\u2705":
-                success: bool = await self.__save_prefix__(pre, ctx.guild.id)
+                success: bool = await self.__save_prefix__(new_prefix, ctx.guild.id)
                 await reload_prefixes()
                 if success:
                     await ctx.send(embed=Embed(title="Changed prefix",
@@ -64,7 +81,14 @@ class CorePrefix(Cog):
                 return
 
     @staticmethod
-    async def __save_prefix__(new_prefix: str, server_id: int):
+    async def __save_prefix__(new_prefix: str, server_id: int) -> bool:
+        """
+        Saves new prefix mapped to server id
+        :param new_prefix: New prefix to save
+        :param server_id: Server id to map prefix to
+        :return: bool wheter saving was successful
+        """
+        logger.debug(f"Trying to save new prefix ({new_prefix}) for server {server_id}")
         try:
             with open(Path("config.yml"), "r") as f:
                 config = safe_load(f)
@@ -82,8 +106,17 @@ class CorePrefix(Cog):
             return False
 
 
-async def current_prefix(guild_id: int = None) -> str:
-    logger.debug(f"Grabbing current prefix from guild: {guild_id}")
-    if guild_id is not None and guild_id in Config.SERVER_PREFIXES:
-        return Config.SERVER_PREFIXES.get(guild_id)
+async def current_prefix(guild: Optional[Union[Guild, int]]) -> str:
+    """
+    Getter for prefix used in guild if set or default prefix.
+    Note: It's possible to use ctx.guild without check because it's none if used in dm.
+    :param guild: Guild or id of guild
+    :return: :str: Prefix
+    """
+    if isinstance(guild, Guild):
+        guild: int = guild.id
+    if guild is not None and guild in Config.SERVER_PREFIXES:
+        logger.debug(f"Grabbing current prefix from guild: {guild}")
+        return Config.SERVER_PREFIXES.get(guild)
+    logger.debug(f"Grabbing default prefix.")
     return Config.DEFAULT_PREFIX

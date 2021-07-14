@@ -30,7 +30,7 @@ class CoreChangelog(Cog, name="Changelog"):
             print("No changelog.json was found. Changelog command won't be useable.")
 
     @group(name="changelog", aliases=["ch", "change"], invoke_without_command=True)
-    @cooldown(2, 3, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def changelog(self, ctx: Context, version: Optional[str]) -> None:
         """
         Prints changelog of current or specified version

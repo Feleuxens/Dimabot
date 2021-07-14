@@ -16,7 +16,7 @@ class EasterEggs(Cog):
     """
 
     @command(name="useless", hidden=True)
-    @cooldown(2, 1, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def useless(self, ctx: Context):
         await ctx.message.delete(delay=2)
 

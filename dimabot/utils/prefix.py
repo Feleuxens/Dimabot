@@ -118,5 +118,5 @@ async def current_prefix(guild: Optional[Union[Guild, int]]) -> str:
     if guild is not None and guild in Config.SERVER_PREFIXES:
         logger.debug(f"Grabbing current prefix from guild: {guild}")
         return Config.SERVER_PREFIXES.get(guild)
-    logger.debug(f"Grabbing default prefix.")
+    logger.debug("Grabbing default prefix.")
     return Config.DEFAULT_PREFIX

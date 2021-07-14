@@ -57,7 +57,7 @@ class BotInfo(Cog, name="Bot Info"):
         await self.bot.wait_until_ready()
 
     @command(name="about", aliases=["info", "infos", "whomadethisshit"])
-    @cooldown(2, 3, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def about(self, ctx: Context) -> None:
         """
         Prints information about the bot
@@ -84,7 +84,7 @@ class BotInfo(Cog, name="Bot Info"):
         await ctx.send(embed=embed)
 
     @command(name="ping", aliases=["p"])
-    @cooldown(2, 4, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def ping(self, ctx: Context) -> None:
         """
         Displays latency of bot to discord.com
@@ -106,7 +106,7 @@ class BotInfo(Cog, name="Bot Info"):
         await ctx.send(embed=embed)
 
     @command(name="latency")
-    @cooldown(5, 2, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def latency(self, ctx: Context):
         """
         Displays latency of Discord's WebSocket protocol latency
@@ -117,7 +117,7 @@ class BotInfo(Cog, name="Bot Info"):
         await ctx.send(embed=embed)
 
     @command(name="version", aliases=["ver"])
-    @cooldown(2, 3, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def version(self, ctx: Context):
         """
         Displays current version of bot
@@ -128,7 +128,7 @@ class BotInfo(Cog, name="Bot Info"):
         await ctx.send(embed=embed)
 
     @command(name="contributor", aliases=["contributors"])
-    @cooldown(2, 3, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def contributor(self, ctx: Context):
         """
         Displays all Contributor

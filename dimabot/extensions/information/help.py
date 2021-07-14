@@ -22,7 +22,7 @@ class Help(Cog):
     """
 
     @command(name="help", aliases=["h", "pls"])
-    @cooldown(2, 3, BucketType.user)
+    @cooldown(2, 5, BucketType.user)
     async def help(self, ctx: Context, *, entity: Optional[str]) -> None:
         """
         Displays this help message
@@ -34,13 +34,12 @@ class Help(Cog):
         try:
             await ctx.send(embed=embed)
         except HTTPException:  # occurs if at least one embed field is "" which only happens if no docstrings are found
-            await ctx.send(embed=Embed(title=f"No documentation",
-                                       description=f"It appears that no or only parts of the documentation"
+            await ctx.send(embed=Embed(title="No documentation",
+                                       description="It appears that no or only parts of the documentation"
                                                    f" for {entity} exist.",
                                        color=colors.YELLOW))
 
     @command(name="adminhelp", aliases=["adminh"])
-    @cooldown(2, 3, BucketType.user)
     @check_any(is_owner(), has_permissions(administrator=True))
     async def adminhelp(self, ctx: Context, *, entity: Optional[str]) -> None:
         """
@@ -53,8 +52,8 @@ class Help(Cog):
         try:
             await ctx.send(embed=embed)
         except HTTPException:  # occurs if at least one embed field is "" which only happens if no docstrings are found
-            await ctx.send(embed=Embed(title=f"No documentation",
-                                       description=f"It appears that no or only parts of the documentation"
+            await ctx.send(embed=Embed(title="No documentation",
+                                       description="It appears that no or only parts of the documentation"
                                                    f" for {entity} exist.",
                                        color=colors.YELLOW))
 

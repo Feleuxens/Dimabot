@@ -42,15 +42,15 @@ bot = Bot(command_prefix=_check_prefix, case_insensitive=True, intents=(Intents.
 bot.remove_command("help")  # remove standard help function
 
 extensions = (
-    "general.welcome",
-    "general.easter_eggs",
-    "information.bot_info",
-    "information.server_info",
-    "information.help",
-    "information.list"
+    "extensions.general.welcome",
+    "extensions.general.easter_eggs",
+    "extensions.information.bot_info",
+    "extensions.information.server_info",
+    "extensions.information.help",
+    "extensions.information.list"
 )
 core = (
-    CoreRuntime(bot, *extensions),
+    CoreRuntime(),
     CoreErrorHandler(),
     CoreChangelog(bot),
     CorePrefix(bot)

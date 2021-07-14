@@ -1,9 +1,13 @@
+from socket import gethostbyname, SOCK_STREAM, AF_INET, socket, timeout, SHUT_RD
+from time import time
+
 from discord import Embed, ActivityType, Status, Activity, Game
-from discord.ext import commands, tasks
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, command, cooldown, BucketType, Cog
+from discord.ext.tasks import loop
 
 from utils import colors
 from utils.config import Config
+from utils.prefix import current_prefix
 
 
 def setup(bot: Bot):
@@ -14,16 +18,25 @@ def teardown(bot: Bot):
     bot.remove_cog("BotInfo")
 
 
-class BotInfo(commands.Cog):
+class BotInfo(Cog, name="Bot Info"):
+    """
+    Cog providing an interface for information about the bot itself and
+    controls the bots' status via a task loop.
+
+    Attributes:
+    -----------
+    bot: `discord.command.ext.Bot`
+    status_counter: `int`
+    """
     def __init__(self, bot):
-        self.status_counter = 0
+        self.status_counter: int = 0
         self.bot: Bot = bot
         self.status_loop.start()
 
     def cog_unload(self):
         self.status_loop.cancel()
 
-    @tasks.loop(seconds=30)
+    @loop(seconds=30)
     async def status_loop(self):
         if self.status_counter == 0:
             await self.bot.change_presence(status=Status.online,
@@ -43,18 +56,15 @@ class BotInfo(commands.Cog):
     async def before_update_status(self):
         await self.bot.wait_until_ready()
 
-    @commands.command(name="about", aliases=["info", "infos", "whomadethisshit"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
-    async def about(self, ctx: Context):
+    @command(name="about", aliases=["info", "infos", "whomadethisshit"])
+    @cooldown(2, 5, BucketType.user)
+    async def about(self, ctx: Context) -> None:
         """
         Prints information about the bot
         :param ctx: Current context
         :return: None
         """
-        if ctx.guild is None:
-            prefix = Config.DEFAULT_PREFIX
-        else:
-            prefix = Config.SERVER_PREFIXES.get(ctx.guild.id)
+        prefix: str = await current_prefix(ctx.guild.id)
 
         embed = Embed(
             title="Dimabot",
@@ -73,19 +83,41 @@ class BotInfo(commands.Cog):
                         inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(name="ping", aliases=["p"])
-    @commands.cooldown(2, 4, commands.BucketType.user)
-    async def ping(self, ctx: Context):
+    @command(name="ping", aliases=["p"])
+    @cooldown(2, 5, BucketType.user)
+    async def ping(self, ctx: Context) -> None:
         """
-        Displays latency of bot
+        Displays latency of bot to discord.com
         :param ctx: Current context
         :return: None
         """
-        embed = Embed(title="Ping", description=f"{int(ctx.bot.latency * 1000)}ms", color=colors.GREEN)
+        host = gethostbyname("discord.com")
+        sock = socket(AF_INET, SOCK_STREAM)
+        sock.settimeout(3)
+        t = time()
+        try:
+            sock.connect((host, 443))
+            sock.shutdown(SHUT_RD)
+        except (timeout, OSError):
+            embed: Embed = Embed(title="Latency", description="An error ocurred while measuring latency "
+                                                              "to discord.com", color=colors.YELLOW)
+        else:
+            embed = Embed(title="Ping", description=f"{int((time()-t) * 1000)}ms", color=colors.GREEN)
         await ctx.send(embed=embed)
 
-    @commands.command(name="version", aliases=["ver"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="latency")
+    @cooldown(2, 5, BucketType.user)
+    async def latency(self, ctx: Context):
+        """
+        Displays latency of Discord's WebSocket protocol latency
+        :param ctx: Cuurent context
+        :return: None
+        """
+        embed: Embed = Embed(title="Latency", description=f"{int(ctx.bot.latency * 1000)}ms", color=colors.GREEN)
+        await ctx.send(embed=embed)
+
+    @command(name="version", aliases=["ver"])
+    @cooldown(2, 5, BucketType.user)
     async def version(self, ctx: Context):
         """
         Displays current version of bot
@@ -95,8 +127,8 @@ class BotInfo(commands.Cog):
         embed = Embed(title="Version", description=f"{Config.VERSION}", color=colors.GREEN)
         await ctx.send(embed=embed)
 
-    @commands.command(name="contributor", aliases=["contributors"])
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @command(name="contributor", aliases=["contributors"])
+    @cooldown(2, 5, BucketType.user)
     async def contributor(self, ctx: Context):
         """
         Displays all Contributor

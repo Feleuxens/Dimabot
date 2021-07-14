@@ -1,6 +1,4 @@
 from pathlib import Path
-
-import sentry_sdk
 from discord import Intents, Message
 from discord.ext.commands import Bot
 
@@ -43,32 +41,26 @@ async def _check_prefix(b: Bot, msg: Message):
 bot = Bot(command_prefix=_check_prefix, case_insensitive=True, intents=(Intents.all()), self_bot=False)
 bot.remove_command("help")  # remove standard help function
 
-
 extensions = (
-    "general.welcome",
-    "general.easter_eggs",
-    "information.bot_info",
-    "information.server_info",
-    "information.help",
-    "information.list"
+    "extensions.general.welcome",
+    "extensions.general.easter_eggs",
+    "extensions.information.bot_info",
+    "extensions.information.server_info",
+    "extensions.information.help",
+    "extensions.information.list"
 )
 core = (
-    CoreRuntime(bot, *extensions),
+    CoreRuntime(),
     CoreErrorHandler(),
     CoreChangelog(bot),
     CorePrefix(bot)
 )
 
 
-logger.debug("Loading core modules...")
-for cog in core:
-    bot.add_cog(cog)
-
-
 @bot.event
 async def on_error(*_, **__):
     # sentry_sdk.capture_exception()
-    raise
+    raise  # skipcq: PYL-E0704
 
 
 @bot.event
@@ -76,13 +68,22 @@ async def on_ready():
     logger.info(f"Logged in as {bot.user} v{Config.VERSION}\n")
 
 
-load_extensions(
-    bot,
-    *extensions
-)
+def main():
+    logger.debug("Loading core modules...")
+    for cog in core:
+        bot.add_cog(cog)
 
-if SENTRY_DSN:
-    logger.debug("Initializing sentry")
-    setup_sentry(SENTRY_DSN, Config.NAME, Config.VERSION)
+    load_extensions(
+        bot,
+        *extensions
+    )
 
-bot.run(TOKEN)
+    if SENTRY_DSN:
+        logger.debug("Initializing sentry")
+        setup_sentry(SENTRY_DSN, Config.NAME, Config.VERSION)
+
+    bot.run(TOKEN)
+
+
+if __name__ == "__main__":
+    main()

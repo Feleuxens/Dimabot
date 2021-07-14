@@ -5,13 +5,17 @@ name = "pypi"
 
 [packages]
 aiohttp = "*"
-requests = "*"
+aioredis = "*"
+sqlalchemy = "*"
+psycopg2 = "*"
 sentry-sdk = "*"
 python-dotenv = "*"
 PyYAML = "*"
 "discord.py" = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-asyncio = "*"
 
 [requires]
 python_version = "3.8"

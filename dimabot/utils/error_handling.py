@@ -1,7 +1,6 @@
 import sentry_sdk
 from discord import Embed
-from discord.ext import commands
-from discord.ext.commands import errors, CommandError, Context
+from discord.ext.commands import errors, CommandError, Context, Cog
 
 from utils import colors
 from utils.logs import get_logger
@@ -9,11 +8,15 @@ from utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class CoreErrorHandler(commands.Cog):
-    @commands.Cog.listener()
+class CoreErrorHandler(Cog):
+    """
+    Cog handling (almost) all command errors
+    """
+
+    @Cog.listener()
     async def on_command_error(self, ctx: Context, error: CommandError):
         # exception have to be ordered from child to parent in exception hierarchy
-        logger.debug(error)
+        # logger.debug(error)
 
         # Discord Exception -> CommandError -> UserInputError -> MissingRequiredArgument
         if isinstance(error, errors.MissingRequiredArgument):  # lowest children, Parent: UserInputError, Level: 4
@@ -46,11 +49,10 @@ class CoreErrorHandler(commands.Cog):
         elif isinstance(error, errors.CommandNotFound):  # lowest children, Parent: CommandError, Level: 3
             if "." in error.args[0]:  # ignore message like "..."
                 return
-            else:
-                await ctx.send(
-                    embed=Embed(title="Something went wrong", description="Sorry, I do not know this command. "
-                                                                          "Perhaps you misspelled it?",
-                                color=colors.RED))
+            await ctx.send(
+                embed=Embed(title="Something went wrong", description="Sorry, I do not know this command. "
+                                                                      "Perhaps you misspelled it?",
+                            color=colors.RED))
 
         # Discord Exception -> CommandError -> CheckFailure -> NoPrivateMessage
         elif isinstance(error, errors.NoPrivateMessage):  # lowest children, Parent: CheckFailure, Level: 4

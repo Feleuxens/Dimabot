@@ -79,8 +79,8 @@ class ServerInfo(Cog, name="Server Info"):
 
 async def _get_streamers(guild: Guild) -> List[Member]:
     """Returns all non bot member from guild with streamer role (Note: Currently not multi server compatible)"""
-    return [streamer for streamer in guild.members if guild.get_role(790972882514739201 and not streamer.bot)
-            in streamer.roles]
+    return [streamer for streamer in guild.members if guild.get_role(790972882514739201) in streamer.roles
+            and not streamer.bot]
 
 
 async def _get_admin(guild: Guild) -> List[Member]:

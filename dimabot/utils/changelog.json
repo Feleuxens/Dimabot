@@ -1,4 +1,8 @@
 {
+  "0.3": {
+    "new": ["Uptime command", "Ping command now refers to ping to discord.com", "Latency command for Discord WebSocket Protocol", "Custom help command"],
+    "fix": ["Fix in .about command to get default Prefix if Server Prefix is not set", "Fix setupwelcome to properly send message in selected channel", "Server Info won't show bots anymore for administrator"]
+  },
   "0.2.1": {
     "new": ["Welcome message", "Notification role on reaction"],
     "fix": ["Prevented Config.VERSION from parsing to float"]

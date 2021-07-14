@@ -35,7 +35,7 @@ class WelcomeChannel(Cog, name="Welcome Channel"):
         # Note: This information will only be save this way until db support was added
         self.channels_config = __load_channels__()
 
-    @command(name="setupwelcome")
+    @command(name="setupwelcome", ignore_extra=False)
     @has_guild_permissions(administrator=True)
     async def setupwelcome(self, ctx: Context, channel: Union[int, TextChannel],
                            guidelines: Union[int, TextChannel, None]):

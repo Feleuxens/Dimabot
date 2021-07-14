@@ -41,9 +41,8 @@ class CoreChangelog(Cog, name="Changelog"):
         if not self.data_found:
             return
 
-        version = Config.VERSION
-        if value is not None:
-            version = value
+        if version is None:
+            version = Config.VERSION
 
         embed = Embed(title="Changelog", color=colors.GREEN)
         if version in self.changelog_data:

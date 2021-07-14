@@ -14,8 +14,8 @@ class List(Cog):
     Cog providing commands for lists about various server or bot properties
     """
 
-    @command(name="list", aliases=["l"], enabled=False)
-    async def list(self, ctx: Context, argument: str = None):
+    @group(name="list", aliases=["l"], invoke_without_command=True)
+    async def list(self, ctx: Context) -> None:
         """
         Get a list of server properties (not implemented).
         :param ctx: Invocation context

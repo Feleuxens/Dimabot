@@ -59,7 +59,8 @@ class CoreChangelog(Cog, name="Changelog"):
             embed: Embed = Embed(title="Changelog", color=colors.YELLOW)
             embed.description = f"Cannot find changelog for v{version}"
 
-        embed.add_field(name="Tip:", value=f"Use `{await current_prefix()}changelog list` for a list of all releases.",
+        embed.add_field(name="Tip:",
+                        value=f"Use `{await current_prefix(ctx.guild)}changelog list` for a list of all releases.",
                         inline=False)
         await ctx.send(embed=embed)
 

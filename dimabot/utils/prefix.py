@@ -35,7 +35,7 @@ class CorePrefix(Cog, name="Prefix"):
         """
         await ctx.send(
             embed=Embed(title="Prefix",
-                        description=f"Prefix is currently set to `{await current_prefix(ctx.guild.id)}`",
+                        description=f"Prefix is currently set to `{await current_prefix(ctx.guild)}`",
                         color=colors.GREEN))
 
     @prefix.command(name="set", ignore_rest=False)
@@ -68,7 +68,7 @@ class CorePrefix(Cog, name="Prefix"):
                 if success:
                     await ctx.send(embed=Embed(title="Changed prefix",
                                                description="Prefix was successfully changed to "
-                                                           f"`{Config.SERVER_PREFIXES.get(ctx.guild.id)}`!",
+                                                           f"`{await current_prefix(ctx.guild.id)}`!",
                                                color=colors.GREEN))
                 else:
                     await ctx.send(embed=Embed(title="Something went wrong",

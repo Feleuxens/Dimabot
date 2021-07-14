@@ -39,13 +39,10 @@ class Help(Cog):
         :param ctx: Current context
         :return: None
         """
-        if len(rest) >= 1:
-            raise TooManyArguments
-
-        prefix = await current_prefix(ctx.guild.id)
+        prefix: str = await current_prefix(ctx.guild)
         parsed_command = ctx.bot.get_command(cmd)
         if parsed_command is not None:
-            embed = Embed(title=f"Aliases for `{await current_prefix(ctx.guild.id)}{parsed_command}` are:",
+            embed = Embed(title=f"Aliases for `{prefix}{parsed_command}` are:",
                           description="\n".join(prefix + alias for alias in parsed_command.aliases),
                           color=colors.GREEN)
         else:

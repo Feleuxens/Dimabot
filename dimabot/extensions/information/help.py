@@ -106,8 +106,8 @@ async def get_help(ctx: Context, is_admin: bool, entity: Optional[str]) -> Embed
     elif entity in ctx.bot.cogs.keys():
         cog: Cog = ctx.bot.cogs.get(entity)
         embed: Embed = Embed(title=f"{cog.qualified_name}", description=f"{cog.description}", color=colors.GREEN)
-        embed.add_field(name=f"Commands",
-                        value=f"\n".join(f"`{cmd.qualified_name}` {cmd.short_doc}" for cmd in cog.walk_commands()),
+        embed.add_field(name="Commands",
+                        value="\n".join(f"`{cmd.qualified_name}` {cmd.short_doc}" for cmd in cog.walk_commands()),
                         inline=False)
 
     elif ctx.bot.get_command(entity) is not None:

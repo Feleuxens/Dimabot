@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 aiohttp = "*"
+aioredis = "*"
+sqlalchemy = "*"
+psycopg2 = "*"
 sentry-sdk = "*"
 python-dotenv = "*"
 PyYAML = "*"
